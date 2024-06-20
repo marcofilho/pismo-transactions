@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/accounts")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @PostMapping(value = "")
     public ResponseEntity<Account> createAccount(@RequestBody AccountDTO accountDto) throws Exception {

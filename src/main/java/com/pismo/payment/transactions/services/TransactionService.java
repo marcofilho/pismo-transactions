@@ -5,21 +5,24 @@ import com.pismo.payment.transactions.domain.operationType.OperationType;
 import com.pismo.payment.transactions.domain.transaction.Transaction;
 import com.pismo.payment.transactions.dtos.TransactionDTO;
 import com.pismo.payment.transactions.repositories.TransactionRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class TransactionService {
-    @Autowired
+
     private TransactionRepository transactionRepository;
-    @Autowired
     private AccountService accountService;
-    @Autowired
     private OperationTypeService operationTypeService;
+
+    @Autowired
+    public TransactionService(TransactionRepository transactionRepository, AccountService accountService, OperationTypeService operationTypeService) {
+        this.transactionRepository = transactionRepository;
+        this.accountService = accountService;
+        this.operationTypeService = operationTypeService;
+    }
 
     public Transaction createTransaction(TransactionDTO transactionDto) throws Exception {
         var account = accountService.getAccountByAccountId(transactionDto.account_id());

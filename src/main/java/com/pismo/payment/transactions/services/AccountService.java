@@ -3,17 +3,20 @@ package com.pismo.payment.transactions.services;
 import com.pismo.payment.transactions.domain.account.Account;
 import com.pismo.payment.transactions.dtos.AccountDTO;
 import com.pismo.payment.transactions.repositories.AccountRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class AccountService {
-    @Autowired
+
     private AccountRepository accountRepository;
+
+    @Autowired
+    public AccountService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     public Account getAccountByAccountId(final Long accountId) throws Exception {
         return accountRepository.findAccountByAccountId(accountId).orElseThrow(() -> new Exception("Account not found."));
