@@ -14,6 +14,7 @@ services:
       - ./dump:/docker-entrypoint-initdb.d
     networks:
       - db-test
+
   app:
     depends_on:
       - mysqldb
