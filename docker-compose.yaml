@@ -10,7 +10,10 @@ services:
     ports:
       - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
     volumes:
-      - mysqlvolume:/var/lib/mysql
+      - /var/lib/mysql
+      - ./dump:/docker-entrypoint-initdb.d
+    networks:
+      - db-test
   app:
     depends_on:
       - mysqldb
@@ -34,3 +37,11 @@ services:
 
 volumes:
   mysqlvolume:
+
+networks:
+  db-test:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "111.111.10.0/24"

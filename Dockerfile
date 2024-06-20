@@ -1,8 +1,8 @@
 FROM maven:3.8.3-openjdk-17
 LABEL authors="Marco"
 
-ENV PROJECT_HOME /usr/src/transactions
-ENV JAR_NAME transactions.jar
+ENV PROJECT_HOME /usr/src/transactionsapp
+ENV JAR_NAME transactionsapp.jar
 
 RUN mkdir -p $PROJECT_HOME
 WORKDIR $PROJECT_HOME

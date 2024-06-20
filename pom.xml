@@ -11,7 +11,7 @@
 	<groupId>com.pismo.payment</groupId>
 	<artifactId>transactions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>transactions</name>
+	<name>transactionsapp</name>
 	<description>Pismo Payment Transactions Simulation</description>
 	<url/>
 	<licenses>
