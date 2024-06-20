@@ -5,13 +5,14 @@ import com.pismo.payment.transactions.dtos.AccountDTO;
 import com.pismo.payment.transactions.repositories.AccountRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class AccountService {
-
+    @Autowired
     private AccountRepository accountRepository;
 
     public Account getAccountByAccountId(final Long accountId) throws Exception {
@@ -22,7 +23,11 @@ public class AccountService {
         return accountRepository.findByDocumentNumber(documentNumber).orElseThrow(() -> new Exception("Account not found."));
     }
 
-    public Account createAccount(final AccountDTO accountDto) {
+    public Account createAccount(final AccountDTO accountDto) throws Exception {
+        var account = accountRepository.findByDocumentNumber(accountDto.documentNumber());
+        if (account.isPresent()) {
+            throw new Exception("Account already exist.");
+        }
         return accountRepository.save(Account.builder().documentNumber(accountDto.documentNumber()).build());
     }
 }
