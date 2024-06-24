@@ -24,7 +24,7 @@ public class TransactionController {
     @PostMapping(value = "")
     @ApiOperation(value = "Create a new transaction", notes = "This API creates a new transaction with the data requested.")
     public ResponseEntity<TransactionResponse> createTransaction(
-            @ApiParam(value = "Dados da nova transação", required = true) @RequestBody TransactionDTO transactionDTO) throws Exception {
+            @ApiParam(value = "New transaction data payload", required = true) @RequestBody TransactionDTO transactionDTO) throws Exception {
         var transaction = transactionService.createTransaction(transactionDTO);
         return new ResponseEntity<>(TransactionResponse.builder()
                 .transactionId(transaction.getTransactionId())

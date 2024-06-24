@@ -24,7 +24,7 @@ public class AccountController {
     @PostMapping(value = "")
     @ApiOperation(value = "Create a new account", notes = "This API creates one new account with the data requested.")
     public ResponseEntity<AccountResponse> createAccount(
-            @ApiParam(value = "Dados da nova conta", required = true) @RequestBody AccountDTO accountDto) throws Exception {
+            @ApiParam(value = "New account body payload", required = true) @RequestBody AccountDTO accountDto) throws Exception {
         var account = accountService.createAccount(accountDto);
         return new ResponseEntity<>(AccountResponse.builder()
                 .accountId(account.getAccountId())
@@ -37,7 +37,7 @@ public class AccountController {
     @ResponseBody
     @ApiOperation(value = "Get an account by an ID", notes = "This API returns the account details by the given ID.")
     public ResponseEntity<AccountResponse> getAccountByAccountId(
-            @ApiParam(value = "ID da conta", required = true) @PathVariable Long account_id) throws Exception {
+            @ApiParam(value = "Account ID", required = true) @PathVariable Long account_id) throws Exception {
         var account = accountService.getAccountByAccountId(account_id);
         return new ResponseEntity<>(AccountResponse.builder()
                 .accountId(account.getAccountId())
