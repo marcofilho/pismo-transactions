@@ -1,10 +1,11 @@
 package com.pismo.payment.transactions.domain.operationType;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name ="operations_type")
-@Table(name="operations_type")
+@Entity(name ="operations_types")
+@Table(name="operations_types")
 @Getter
 @Setter
 @Builder
@@ -14,6 +15,7 @@ import lombok.*;
 public class OperationType {
 
     @Id
+    @JsonProperty(value = "operation_type_id")
     private Long operationTypeId;
 
     @Column(name = "description")

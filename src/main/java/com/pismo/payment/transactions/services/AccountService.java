@@ -29,7 +29,7 @@ public class AccountService {
     public Account createAccount(final AccountDTO accountDto) throws Exception {
         var account = accountRepository.findByDocumentNumber(accountDto.documentNumber());
         if (account.isPresent()) {
-            throw new Exception("Account already exist.");
+            throw new Exception("Account already exists.");
         }
         return accountRepository.save(Account.builder().documentNumber(accountDto.documentNumber()).build());
     }

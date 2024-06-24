@@ -1,10 +1,11 @@
-CREATE
-DATABASE PismoFinanceDB;
+CREATE DATABASE PismoFinanceDB;
 
-USE
-PismoFinanceDB;
+USE PismoFinanceDB;
 
+DROP TABLE IF EXISTS `transactions`;
 DROP TABLE IF EXISTS `accounts`;
+DROP TABLE IF EXISTS `operations_types`;
+
 CREATE TABLE `accounts`
 (
     `account_id`      BIGINT      NOT NULL AUTO_INCREMENT,
@@ -12,31 +13,27 @@ CREATE TABLE `accounts`
     PRIMARY KEY (`account_id`)
 );
 
-DROP TABLE IF EXISTS `operations_type`;
-CREATE TABLE `operationsTypes`
+CREATE TABLE `operations_types`
 (
     `operation_type_id` BIGINT       NOT NULL,
-    `description`      VARCHAR(100) NOT NULL,
-    PRIMARY KEY (`operationType_id`)
+    `description`       VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`operation_type_id`)
 );
 
-DROP TABLE IF EXISTS `transactions`;
 CREATE TABLE `transactions`
 (
-    `transaction_id`   BIGINT         NOT NULL AUTO_INCREMENT,
-    `account_id`       BIGINT         NOT NULL,
+    `transaction_id`    BIGINT         NOT NULL AUTO_INCREMENT,
+    `account_id`        BIGINT         NOT NULL,
     `operation_type_id` BIGINT         NOT NULL,
-    `amount`           DECIMAL(10, 2) NOT NULL,
-    `eventDate`        DATETIME       NOT NULL,
+    `amount`            DECIMAL(10, 2) NOT NULL,
+    `eventDate`         DATETIME       NOT NULL,
     PRIMARY KEY (`transaction_id`),
-    FOREIGN KEY (`account_id`) REFERENCES accounts (`account_id`),
-    FOREIGN KEY (`operationType_id`) REFERENCES operationsTypes (`operationType_id`)
+    FOREIGN KEY (`account_id`) REFERENCES `accounts` (`account_id`),
+    FOREIGN KEY (`operation_type_id`) REFERENCES `operations_types` (`operation_type_id`)
 );
 
-INSERT INTO `operations_type` (`operation_type_id`, `description`)
+INSERT INTO `operations_types` (`operation_type_id`, `description`)
 VALUES (1, 'COMPRA A VISTA'),
        (2, 'COMPRA PARCELADA'),
        (3, 'SAQUE'),
        (4, 'PAGAMENTO');
-
-COMMIT;

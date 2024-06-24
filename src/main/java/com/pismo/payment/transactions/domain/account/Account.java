@@ -20,7 +20,7 @@ public class Account {
     private Long accountId;
 
     @JsonProperty(value = "document_number")
-    @Column(name = "documentNumber")
+    @Column(name = "documentNumber", unique = true)
     private String documentNumber;
 
 }
