@@ -1,48 +1,31 @@
 services:
 
-  mysqldb:
-    image: mysql:5.7
+  mysql:
+    image: mysql:8.0.28
+    container_name: mysql-db
     restart: always
-    env_file: ./.env
     environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: PismoFinanceDB
     ports:
-      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+      - "3306:3306"
     volumes:
-      - /var/lib/mysql
-      - ./dump:/docker-entrypoint-initdb.d
-    networks:
-      - db-test
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  app:
-    depends_on:
-      - mysqldb
+  spring-app:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
-    working_dir: /usr/src/transactionsapp
-    container_name: transactionsapp
-    restart: on-failure
-    env_file: ./.env
+    container_name: spring-app
     ports:
-      - $SPRING_LOCAL_PORT:$SPRING_DOCKER_PORT
+      - "8080:8080"
+    depends_on:
+      - mysql
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:$MYSQLDB_DOCKER_PORT/$MYSQLDB_DATABASE?useSSL=false&createDatabaseIfNotExist=true
-      - SPRING_DATASOURCE_USERNAME=$MYSQLDB_USER
-      - SPRING_DATASOURCE_PASSWORD=$MYSQLDB_ROOT_PASSWORD
-    volumes:
-      - .m2:/root/.m2
-    stdin_open: true
-    tty: true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/PismoFinanceDB
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
 
 volumes:
-  mysqlvolume:
-
-networks:
-  db-test:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: "111.111.10.0/24"
+  mysql-data:

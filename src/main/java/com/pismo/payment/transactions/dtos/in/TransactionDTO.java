@@ -1,4 +1,4 @@
-package com.pismo.payment.transactions.dtos;
+package com.pismo.payment.transactions.dtos.in;
 
 import java.math.BigDecimal;
 

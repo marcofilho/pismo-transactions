@@ -1,9 +1,8 @@
 spring:
   datasource:
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/
+    url: jdbc:mysql://localhost:3306/app_database?useSSL=false&serverTimezone=UTC
+    username: app_user
+    password: app_password
     driver-class-name: com.mysql.cj.jdbc.Driver
-  sql:
-    init:
-      mode: always
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect

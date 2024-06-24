@@ -1,7 +1,7 @@
 package com.pismo.payment.transactions.services;
 
 import com.pismo.payment.transactions.domain.account.Account;
-import com.pismo.payment.transactions.dtos.AccountDTO;
+import com.pismo.payment.transactions.dtos.in.AccountDTO;
 import com.pismo.payment.transactions.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

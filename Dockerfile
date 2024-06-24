@@ -1,16 +1,10 @@
-FROM maven:3.8.3-openjdk-17
-LABEL authors="Marco"
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean install
 
-ENV PROJECT_HOME /usr/src/transactionsapp
-ENV JAR_NAME transactionsapp.jar
-
-RUN mkdir -p $PROJECT_HOME
-WORKDIR $PROJECT_HOME
-
-COPY . .
-
-RUN mvn clean package -DskipTests
-
-RUN mv $PROJECT_HOME/target/$JAR_NAME $PROJECT_HOME/
-
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=prod", "transactionsapp.jar"]
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/transactionsapp-0.0.1-SNAPSHOT.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]

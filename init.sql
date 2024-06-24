@@ -12,10 +12,10 @@ CREATE TABLE `accounts`
     PRIMARY KEY (`account_id`)
 );
 
-DROP TABLE IF EXISTS `operationsTypes`;
+DROP TABLE IF EXISTS `operations_type`;
 CREATE TABLE `operationsTypes`
 (
-    `operationType_id` BIGINT       NOT NULL AUTO_INCREMENT,
+    `operation_type_id` BIGINT       NOT NULL,
     `description`      VARCHAR(100) NOT NULL,
     PRIMARY KEY (`operationType_id`)
 );
@@ -25,7 +25,7 @@ CREATE TABLE `transactions`
 (
     `transaction_id`   BIGINT         NOT NULL AUTO_INCREMENT,
     `account_id`       BIGINT         NOT NULL,
-    `operationType_id` BIGINT         NOT NULL,
+    `operation_type_id` BIGINT         NOT NULL,
     `amount`           DECIMAL(10, 2) NOT NULL,
     `eventDate`        DATETIME       NOT NULL,
     PRIMARY KEY (`transaction_id`),
@@ -33,7 +33,7 @@ CREATE TABLE `transactions`
     FOREIGN KEY (`operationType_id`) REFERENCES operationsTypes (`operationType_id`)
 );
 
-INSERT INTO `operationsTypes` (`operation_type_id`, `description`)
+INSERT INTO `operations_type` (`operation_type_id`, `description`)
 VALUES (1, 'COMPRA A VISTA'),
        (2, 'COMPRA PARCELADA'),
        (3, 'SAQUE'),

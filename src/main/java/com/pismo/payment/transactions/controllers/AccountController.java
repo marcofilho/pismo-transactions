@@ -1,9 +1,8 @@
 package com.pismo.payment.transactions.controllers;
 
 import com.pismo.payment.transactions.domain.account.Account;
-import com.pismo.payment.transactions.dtos.AccountDTO;
+import com.pismo.payment.transactions.dtos.in.AccountDTO;
 import com.pismo.payment.transactions.services.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
