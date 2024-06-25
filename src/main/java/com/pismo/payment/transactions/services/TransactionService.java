@@ -6,12 +6,14 @@ import com.pismo.payment.transactions.domain.transaction.Transaction;
 import com.pismo.payment.transactions.dtos.in.TransactionRequest;
 import com.pismo.payment.transactions.dtos.out.TransactionResponse;
 import com.pismo.payment.transactions.exceptions.AccountException;
+import com.pismo.payment.transactions.exceptions.InvalidTransactionAmountException;
 import com.pismo.payment.transactions.exceptions.OperationTypeException;
 import com.pismo.payment.transactions.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -33,6 +35,18 @@ public class TransactionService {
         var account = accountService.getAccountByAccountId(transactionRequest.account_id());
         if (account == null)
             throw new AccountException("Account not found.");
+
+        if (transactionRequest.operation_type_id() != 4) {
+            if (transactionRequest.amount().compareTo(BigDecimal.ZERO) >= 0) {
+                throw new InvalidTransactionAmountException("Operation not permitted.");
+            }
+        }
+
+        if (transactionRequest.operation_type_id() == 4) {
+            if (transactionRequest.amount().compareTo(BigDecimal.ZERO) < 0) {
+                throw new InvalidTransactionAmountException("Operation not permitted.");
+            }
+        }
 
         var operationType = operationTypeService.getOperationTypeByOperationTypeId(transactionRequest.operation_type_id());
         if (operationType == null)

@@ -7,6 +7,7 @@ import com.pismo.payment.transactions.dtos.in.TransactionRequest;
 import com.pismo.payment.transactions.dtos.out.AccountResponse;
 import com.pismo.payment.transactions.dtos.out.TransactionResponse;
 import com.pismo.payment.transactions.exceptions.AccountException;
+import com.pismo.payment.transactions.exceptions.InvalidTransactionAmountException;
 import com.pismo.payment.transactions.exceptions.OperationTypeException;
 import com.pismo.payment.transactions.repositories.TransactionRepository;
 import org.junit.jupiter.api.Assertions;
@@ -50,7 +51,7 @@ public class TransactionServiceTest {
     @Test
     public void shouldCreateANewTransactionWithSuccess() throws Exception {
         //Arrange
-        var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 1L);
+        var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 4L);
         var accountResponse = AccountResponse.builder().account_id(1L).build();
         var operationType = OperationType.builder().operationTypeId(1L).build();
 
@@ -67,7 +68,7 @@ public class TransactionServiceTest {
 
         //Assert
         assertNotNull(response);
-        assertEquals(1L, response.operation_type_id());
+        assertEquals(4L, response.operation_type_id());
         assertEquals(1L, response.account_id());
         assertEquals(new BigDecimal("100.0"), response.amount());
         assertNotNull(response.event_date());
@@ -88,9 +89,9 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void shouldOperationTypeExceptionWhenOperationTypeDoesNotExist() {
+    public void shouldThrowOperationTypeExceptionWhenOperationTypeDoesNotExist() {
         //Arrange
-        var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 1L);
+        var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 4L);
         var accountResponse = AccountResponse.builder().account_id(1L).build();
 
         when(accountService.getAccountByAccountId(anyLong())).thenReturn(accountResponse);
@@ -101,5 +102,37 @@ public class TransactionServiceTest {
 
         //Assert
         assertEquals("Operation type does not exist.", thrown.getMessage());
+    }
+
+    @Test
+    public void shouldThrowInvalidTransactionAmountExceptionWhenAPositiveAmountWithOperationTypeDifferentFrom4() {
+        //Arrange
+        var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 1L);
+        var accountResponse = AccountResponse.builder().account_id(1L).build();
+
+        when(accountService.getAccountByAccountId(anyLong())).thenReturn(accountResponse);
+        when(operationTypeService.getOperationTypeByOperationTypeId(anyLong())).thenReturn(null);
+
+        //Act
+        var thrown = assertThrows(InvalidTransactionAmountException.class, () -> transactionService.createTransaction(transactionRequest));
+
+        //Assert
+        assertEquals("Operation not permitted.", thrown.getMessage());
+    }
+
+    @Test
+    public void shouldThrowInvalidTransactionAmountExceptionWhenANegativeAmountWithOperationTypeEqual4() {
+        //Arrange
+        var transactionRequest = new TransactionRequest(new BigDecimal("-100.0"), 1L, 4L);
+        var accountResponse = AccountResponse.builder().account_id(1L).build();
+
+        when(accountService.getAccountByAccountId(anyLong())).thenReturn(accountResponse);
+        when(operationTypeService.getOperationTypeByOperationTypeId(anyLong())).thenReturn(null);
+
+        //Act
+        var thrown = assertThrows(InvalidTransactionAmountException.class, () -> transactionService.createTransaction(transactionRequest));
+
+        //Assert
+        assertEquals("Operation not permitted.", thrown.getMessage());
     }
 }

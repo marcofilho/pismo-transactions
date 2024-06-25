@@ -1,10 +1,7 @@
 package com.pismo.payment.transactions.infra;
 
 import com.pismo.payment.transactions.dtos.error.ErrorResponse;
-import com.pismo.payment.transactions.exceptions.AccountException;
-import com.pismo.payment.transactions.exceptions.AccountNotFoundException;
-import com.pismo.payment.transactions.exceptions.OperationTypeException;
-import com.pismo.payment.transactions.exceptions.TransactionException;
+import com.pismo.payment.transactions.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,9 +34,16 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         var errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(InvalidTransactionAmountException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidTransactionAmountException(InvalidTransactionAmountException ex) {
+        var errorResponse = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }
