@@ -51,7 +51,7 @@ public class TransactionServiceTest {
     public void shouldCreateANewTransactionWithSuccess() throws Exception {
         //Arrange
         var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 1L);
-        var accountResponse = AccountResponse.builder().accountId(1L).build();
+        var accountResponse = AccountResponse.builder().account_id(1L).build();
         var operationType = OperationType.builder().operationTypeId(1L).build();
 
         when(accountService.getAccountByAccountId(anyLong())).thenReturn(accountResponse);
@@ -91,8 +91,7 @@ public class TransactionServiceTest {
     public void shouldOperationTypeExceptionWhenOperationTypeDoesNotExist() {
         //Arrange
         var transactionRequest = new TransactionRequest(new BigDecimal("100.0"), 1L, 1L);
-        var accountResponse = AccountResponse.builder().accountId(1L).build();
-        var account = Account.builder().accountId(accountResponse.accountId()).documentNumber(accountResponse.documentNumber()).build();
+        var accountResponse = AccountResponse.builder().account_id(1L).build();
 
         when(accountService.getAccountByAccountId(anyLong())).thenReturn(accountResponse);
         when(operationTypeService.getOperationTypeByOperationTypeId(anyLong())).thenReturn(null);

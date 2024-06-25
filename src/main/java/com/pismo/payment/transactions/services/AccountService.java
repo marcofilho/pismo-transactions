@@ -25,8 +25,8 @@ public class AccountService {
         var account = accountRepository.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account not found."));
 
         return AccountResponse.builder()
-                .accountId(account.getAccountId())
-                .documentNumber(account.getDocumentNumber())
+                .account_id(account.getAccountId())
+                .document_id(account.getDocumentNumber())
                 .build();
     }
 
@@ -34,8 +34,8 @@ public class AccountService {
         var account = accountRepository.findByDocumentNumber(documentNumber).orElseThrow(() -> new AccountNotFoundException("Account not found."));
 
         return AccountResponse.builder()
-                .accountId(account.getAccountId())
-                .documentNumber(account.getDocumentNumber())
+                .account_id(account.getAccountId())
+                .document_id(account.getDocumentNumber())
                 .build();
     }
 
@@ -47,8 +47,8 @@ public class AccountService {
         var newAccount = accountRepository.save(Account.builder().documentNumber(accountRequest.documentNumber()).build());
 
         return AccountResponse.builder()
-                .accountId(newAccount.getAccountId())
-                .documentNumber(newAccount.getDocumentNumber())
+                .account_id(newAccount.getAccountId())
+                .document_id(newAccount.getDocumentNumber())
                 .build();
     }
 }

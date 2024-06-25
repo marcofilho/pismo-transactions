@@ -44,8 +44,8 @@ public class AccountServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(1L, result.accountId());
-        assertEquals("10", result.documentNumber());
+        assertEquals(1L, result.account_id());
+        assertEquals("10", result.document_id());
     }
 
     @Test
@@ -68,8 +68,8 @@ public class AccountServiceTest {
 
         //Assert
         assertNotNull(response);
-        assertEquals(1L, response.accountId());
-        assertEquals("10", response.documentNumber());
+        assertEquals(1L, response.account_id());
+        assertEquals("10", response.document_id());
     }
 
     @Test
@@ -94,8 +94,8 @@ public class AccountServiceTest {
 
         //Assert
         assertNotNull(response);
-        assertEquals(1L, response.accountId());
-        assertEquals("10", response.documentNumber());
+        assertEquals(1L, response.account_id());
+        assertEquals("10", response.document_id());
     }
 
     @Test
