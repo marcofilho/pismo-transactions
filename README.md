@@ -1,72 +1,91 @@
-### How to run?
+# Pismo Transactions API
 
-- Download source code with git clone from GitHub
+## How to Run
 
-        git clone https://github.com/marcofilho/pismo-transactions.git
+1. **Download source code with git clone from GitHub:**
+    ```bash
+    git clone https://github.com/marcofilho/pismo-transactions.git
+    ```
 
-- Go to directory you cloned.
+2. **Go to the directory you cloned:**
+    ```bash
+    cd /pismo-transactions
+    ```
 
-    	cd /pismo-transactions
+3. **Start docker compose:**
+    ```bash
+    docker compose up --build
+    ```
 
-- Start docker compose.
+## API Specifications
 
-    	docker compose up --build
+- **BaseURL:**
+    ```
+    http://localhost:8080
+    ```
 
+## Endpoints
 
-### API Specifications
+### Create an Account
 
-- BaseURL
+- **Endpoint:**
+    ```
+    POST /accounts
+    ```
 
-        http://localhost:8080
-
-- Create an account
-
-  POST `/accounts`
-
-  Request Body:
-
-  	{
-  		"document_number": "123456789"
-  	}
-
-  Response Body:
-
-  	{
-        "account_id": 1
-        "document_number": "123456789"
+- **Request Body:**
+    ```json
+    {
+        "document_number": "12345678900"
     }
+    ```
 
-
-- Get account information
-
-  GET `/accounts/:account_id`
-
-  Response Body:
-
-  	{
+- **Response:**
+    ```json
+    {
         "account_id": 1,
         "document_number": "12345678900"
-  	} 
+    }
+    ```
 
+### Get Account Information
 
-- Create a transaction
+- **Endpoint:**
+    ```
+    GET /accounts/:account_id
+    ```
 
-  POST `/transactions`
+- **Response Body:**
+    ```json
+    {
+        "account_id": 1,
+        "document_number": "12345678900"
+    }
+    ```
 
-  Request Body:
+### Create a Transaction
 
-  	{
+- **Endpoint:**
+    ```
+    POST /transactions
+    ```
+
+- **Request Body:**
+    ```json
+    {
         "account_id": 1,
         "operation_type_id": 1,
         "amount": 400.00
-  	}
+    }
+    ```
 
-  Response:
-
-  	{
+- **Response Body:**
+    ```json
+    {
         "transaction_id": 1,
         "account_id": 1,
         "operation_type_id": 1,
         "amount": 400.00,
-        "event_date": 400.00,
-  	}
+        "event_date": "2023-06-25T12:00:00Z"
+    }
+    ```
