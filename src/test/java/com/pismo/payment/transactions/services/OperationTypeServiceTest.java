@@ -56,10 +56,10 @@ public class OperationTypeServiceTest {
     @Test
     void shouldThrowOperationTypeNotFoundExceptionWhenOperationTypeIsInvalid() {
         //Arrange
-        when(operationTypeService.getOperationTypeByOperationTypeId(anyLong())).thenReturn(null);
+        when(operationTypeRepository.findByOperationTypeId(anyLong())).thenReturn(Optional.empty());
 
-        //Assert
-        var thrown = assertThrows(AccountException.class, () -> operationTypeService.getOperationTypeByOperationTypeId(5L));
+        //Act
+        var thrown = assertThrows(OperationTypeException.class, () -> operationTypeService.getOperationTypeByOperationTypeId(1L));
 
         //Assert
         assertEquals("OperationType invalid.", thrown.getMessage());
