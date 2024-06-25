@@ -1,7 +1,10 @@
 package com.pismo.payment.transactions.services;
 
 import com.pismo.payment.transactions.domain.account.Account;
-import com.pismo.payment.transactions.dtos.in.AccountDTO;
+import com.pismo.payment.transactions.dtos.in.AccountRequest;
+import com.pismo.payment.transactions.dtos.out.AccountResponse;
+import com.pismo.payment.transactions.exceptions.AccountException;
+import com.pismo.payment.transactions.exceptions.AccountNotFoundException;
 import com.pismo.payment.transactions.repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +21,34 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public Account getAccountByAccountId(final Long accountId) throws Exception {
-        return accountRepository.findAccountByAccountId(accountId).orElseThrow(() -> new Exception("Account not found."));
+    public AccountResponse getAccountByAccountId(final Long accountId) {
+        var account = accountRepository.findAccountByAccountId(accountId).orElseThrow(() -> new AccountNotFoundException("Account not found."));
+
+        return AccountResponse.builder()
+                .accountId(account.getAccountId())
+                .documentNumber(account.getDocumentNumber())
+                .build();
     }
 
-    public Account getAccount(final String documentNumber) throws Exception {
-        return accountRepository.findByDocumentNumber(documentNumber).orElseThrow(() -> new Exception("Account not found."));
+    public AccountResponse getAccount(final String documentNumber) {
+        var account = accountRepository.findByDocumentNumber(documentNumber).orElseThrow(() -> new AccountNotFoundException("Account not found."));
+
+        return AccountResponse.builder()
+                .accountId(account.getAccountId())
+                .documentNumber(account.getDocumentNumber())
+                .build();
     }
 
-    public Account createAccount(final AccountDTO accountDto) throws Exception {
-        var account = accountRepository.findByDocumentNumber(accountDto.documentNumber());
-        if (account.isPresent()) {
-            throw new Exception("Account already exists.");
-        }
-        return accountRepository.save(Account.builder().documentNumber(accountDto.documentNumber()).build());
+    public AccountResponse createAccount(final AccountRequest accountRequest) {
+        var account = accountRepository.findByDocumentNumber(accountRequest.documentNumber());
+        if (account.isPresent())
+            throw new AccountException("Account already exists.");
+
+        var newAccount = accountRepository.save(Account.builder().documentNumber(accountRequest.documentNumber()).build());
+
+        return AccountResponse.builder()
+                .accountId(newAccount.getAccountId())
+                .documentNumber(newAccount.getDocumentNumber())
+                .build();
     }
 }

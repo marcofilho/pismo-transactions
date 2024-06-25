@@ -11,7 +11,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity(name = "transactions")
+@Entity
 @Table(name = "transactions")
 @Getter
 @Setter

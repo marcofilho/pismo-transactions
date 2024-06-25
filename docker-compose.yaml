@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
 
   mysql:
@@ -10,7 +12,6 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   spring-app:
@@ -18,6 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: spring-app
+    restart: on-failure
     ports:
       - "8080:8080"
     depends_on:
@@ -27,5 +29,3 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: rootpassword
 
-volumes:
-  mysql-data:

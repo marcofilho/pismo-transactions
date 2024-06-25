@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "Accounts")
-@Table(name = "Accounts")
+@Entity
+@Table(name = "accounts")
 @Getter
 @Setter
 @Builder
@@ -20,7 +20,7 @@ public class Account {
     private Long accountId;
 
     @JsonProperty(value = "document_number")
-    @Column(name = "documentNumber", unique = true)
+    @Column(unique = true)
     private String documentNumber;
 
 }

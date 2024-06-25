@@ -3,11 +3,16 @@ package com.pismo.payment.transactions.services;
 import com.pismo.payment.transactions.domain.account.Account;
 import com.pismo.payment.transactions.domain.operationType.OperationType;
 import com.pismo.payment.transactions.domain.transaction.Transaction;
-import com.pismo.payment.transactions.dtos.in.TransactionDTO;
+import com.pismo.payment.transactions.dtos.in.TransactionRequest;
+import com.pismo.payment.transactions.dtos.out.TransactionResponse;
+import com.pismo.payment.transactions.exceptions.AccountException;
+import com.pismo.payment.transactions.exceptions.OperationTypeException;
 import com.pismo.payment.transactions.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -24,21 +29,34 @@ public class TransactionService {
         this.operationTypeService = operationTypeService;
     }
 
-    public Transaction createTransaction(TransactionDTO transactionDto) throws Exception {
-        var account = accountService.getAccountByAccountId(transactionDto.account_id());
-        var operationType = operationTypeService.getOperationTypeByOperationTypeId(transactionDto.operationType_id());
-        var transaction = new Transaction();
-        if (account != null && operationType != null) {
-            transaction = Transaction.builder()
-                    .account(Account.builder()
-                            .accountId(transactionDto.account_id())
-                            .build())
-                    .operationsType(OperationType.builder()
-                            .operationTypeId(transactionDto.operationType_id())
-                            .build())
-                    .amount(transactionDto.amount())
-                    .build();
-        }
-        return transactionRepository.save(transaction);
+    public TransactionResponse createTransaction(TransactionRequest transactionRequest) {
+        var account = accountService.getAccountByAccountId(transactionRequest.account_id());
+        if (account == null)
+            throw new AccountException("Account not found.");
+
+        var operationType = operationTypeService.getOperationTypeByOperationTypeId(transactionRequest.operation_type_id());
+        if (operationType == null)
+            throw new OperationTypeException("Operation type does not exist.");
+
+        var transaction = Transaction.builder()
+                .account(Account.builder()
+                        .accountId(transactionRequest.account_id())
+                        .build())
+                .operationsType(OperationType.builder()
+                        .operationTypeId(transactionRequest.operation_type_id())
+                        .build())
+                .amount(transactionRequest.amount())
+                .eventDate(LocalDateTime.now())
+                .build();
+
+        transactionRepository.save(transaction);
+
+        return TransactionResponse.builder()
+                .transaction_id(transaction.getTransactionId())
+                .operation_type_id(transaction.getOperationsType().getOperationTypeId())
+                .account_id(transaction.getAccount().getAccountId())
+                .amount(transaction.getAmount())
+                .event_date(transaction.getEventDate())
+                .build();
     }
 }

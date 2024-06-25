@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS PismoFinanceDB;
+
 USE PismoFinanceDB;
 
 DROP TABLE IF EXISTS `accounts`;
@@ -33,3 +34,5 @@ CREATE TABLE `transactions` (
                                 FOREIGN KEY (`account_id`) REFERENCES `accounts` (`account_id`),
                                 FOREIGN KEY (`operation_type_id`) REFERENCES `operations_types` (`operation_type_id`)
 );
+
+COMMIT;

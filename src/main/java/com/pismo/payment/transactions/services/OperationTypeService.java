@@ -1,6 +1,7 @@
 package com.pismo.payment.transactions.services;
 
 import com.pismo.payment.transactions.domain.operationType.OperationType;
+import com.pismo.payment.transactions.exceptions.OperationTypeException;
 import com.pismo.payment.transactions.repositories.OperationTypeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,8 @@ public class OperationTypeService {
         this.operationTypeRepository = operationTypeRepository;
     }
 
-
-    public OperationType getOperationTypeByOperationTypeId(Long operationTypeId) throws Exception {
-        return operationTypeRepository.findByOperationTypeId(operationTypeId).orElseThrow(() -> new Exception("OperationType invalid."));
+    public OperationType getOperationTypeByOperationTypeId(Long operationTypeId) {
+        return operationTypeRepository.findByOperationTypeId(operationTypeId).orElseThrow(() -> new OperationTypeException("OperationType invalid."));
     }
 }
 
